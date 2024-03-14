@@ -1,0 +1,74 @@
+﻿<%@ Master Language="VB" CodeFile="MasterPage.master.vb" Inherits="MasterPage" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <!-- Latest compiled and minified CSS -->
+
+    <!-- Optional theme -->
+
+    <%--<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css"/>--%>
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <link href="master-style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+</head>
+<body>
+
+
+    <div class="card" style="position: fixed; width: 18rem; height: 100vh; background-color: red">
+        <div style="width: 100%;">
+            <h1>E-Learning</h1>
+        </div>
+        <ul class="list-group list-group-flush">
+        <li class="list-group-item" id="studentItem">
+            <asp:HyperLink ID="linkCreateUser" runat="server" Text="Student" NavigateUrl="~/features/student/student-inspect.aspx" CssClass="w3-bar-item w3-button" ></asp:HyperLink>
+        </li>
+        <li class="list-group-item" id="courseItem">
+           <asp:HyperLink ID="HyperLink2" runat="server" Text="Course" NavigateUrl="~/features/course/course-inspect.aspx" CssClass="w3-bar-item w3-button" ></asp:HyperLink>
+        </li>
+        <li class="list-group-item" id="instructorItem"> 
+            <asp:HyperLink ID="HyperLink1" runat="server" Text="Instructor" NavigateUrl="~/features/instructor/instructor-inspect.aspx" CssClass="w3-bar-item w3-button" ></asp:HyperLink>
+        </li>
+    </ul>
+    </div>
+
+    <div class="content-divider">
+
+
+        <div class="content-host container" style="margin-left: 200px">
+
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+    </div>
+
+
+   <script>
+    // Get the current page URL
+    var currentPageUrl = window.location.href;
+
+    // Function to highlight the active list item
+    function highlightActiveItem() {
+        // Check if the current URL contains "student" and highlight the corresponding list item
+        if (currentPageUrl.includes("student")) {
+            document.getElementById("studentItem").classList.add("active");
+        } else if (currentPageUrl.includes("course")) {
+            document.getElementById("courseItem").classList.add("active");
+        } else if (currentPageUrl.includes("instructor")) {
+            document.getElementById("instructorItem").classList.add("active");
+        }
+    }
+
+    // Call the function to highlight the active list item when the page loads
+    window.onload = highlightActiveItem;
+   </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+</html>
