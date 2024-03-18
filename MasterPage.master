@@ -4,71 +4,475 @@
 
 <html>
 <head runat="server">
-    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <!-- Optional theme -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-    <%--<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css"/>--%>
+
     <title></title>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
     <link href="master-style.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!-- Optional theme -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
+
+    <style>
+        .select {
+            padding: 3px;
+            margin: 0;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 20px;
+            font-size: 15px;
+            border: 2px solid silver;
+            width: 100%;
+            outline: none;
+            display: inline-block;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            cursor: pointer;
+            text-indent: 20px;
+        }
+
+        /*.whole {background-color: #EBEBEB;}*/
+        a {
+            color: inherit !important;
+            text-decoration: none !important;
+            cursor: default !important;
+            outline: none;
+            Remove focus outline
+        }
+
+        #snackbar {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: white;
+            color: black;
+            text-align: center;
+            border-radius: 4px;
+            border: 2px solid #D1D5DB;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: calc(50% + 100px);
+            top: 30px;
+        }
+
+
+            #snackbar.show {
+                visibility: visible;
+                -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+                animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            }
+
+        .grid-form {
+            background-color: white;
+        }
+
+
+        @-webkit-keyframes fadein {
+            from {
+                top: 0;
+                opacity: 0;
+            }
+
+            to {
+                top: 30px;
+                opacity: 1;
+            }
+        }
+
+
+        @keyframes fadein {
+            from {
+                top: 0;
+                opacity: 0;
+            }
+
+            to {
+                top: 30px;
+                opacity: 1;
+            }
+        }
+
+        @-webkit-keyframes fadeout {
+            from {
+                top: 30px;
+                opacity: 1;
+            }
+
+            to {
+                top: 0;
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeout {
+            from {
+                top: 30px;
+                opacity: 1;
+            }
+
+            to {
+                top: 0;
+                opacity: 0;
+            }
+        }
+
+        .add-new a {
+            color: white !important;
+            Inherit the color from the parent text-decoration: none !important;
+            cursor: default !important;
+            outline: none;
+            background-color: #A62A22;
+            padding: 6px 8px;
+        }
+
+        a:hover {
+            cursor: pointer !important;
+        }
+
+        .registration-form {
+            padding: 50px 0;
+        }
+
+            .registration-form form {
+                background-color: #fff;
+                max-width: 600px;
+                margin: auto;
+                padding: 50px 70px;
+                border-radius: 30px;
+                border-top: 4px solid #EDEDED;
+                border-left: 4px solid #EDEDED;
+                box-shadow: 0 8px 8px rgba(237, 237, 237, 1);
+            }
+
+            .registration-form .form-icon {
+                text-align: center;
+                font-size: 40px;
+                color: black;
+                margin: auto;
+                margin-bottom: 50px;
+                line-height: 100px;
+            }
+
+            .registration-form .item {
+                border-radius: 20px;
+                margin-bottom: 25px;
+                padding: 10px 20px;
+            }
+
+            .registration-form .create-account {
+                border-radius: 30px;
+                padding: 10px 20px;
+                font-size: 18px;
+                font-weight: bold;
+                background-color: #5791ff;
+                border: none;
+                color: white;
+                margin-top: 20px;
+                width: 100%;
+            }
+
+
+
+
+
+        @media (max-width: 576px) {
+            .registration-form form {
+                padding: 50px 20px;
+            }
+
+            .registration-form .form-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 30px;
+            }
+        }
+
+
+
+
+
+        @keyframes slide {
+            from {
+                background-position: 0 0;
+            }
+
+            to {
+                background-position: -120px 60px;
+            }
+        }
+
+
+        .hide-box {
+            visibility: hidden;
+        }
+
+        #modal {
+            position: absolute;
+            visibility: hidden;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: auto;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.6rem 3rem;
+            border: 3px solid black;
+            border-radius: 5px;
+            background: white;
+            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+
+            #modal.show {
+                visibility: visible;
+            }
+
+            #modal.hide {
+                visibility: hidden;
+            }
+
+        .message {
+            font-size: 1.1rem;
+            margin-bottom: 1.6rem;
+            margin-top: 0;
+        }
+
+        .btn2 {
+            color: inherit;
+            font-family: inherit;
+            font-size: inherit;
+            background: white;
+            padding: 0.3rem 3.4rem;
+            border: 3px solid black;
+            margin-right: 2.6rem;
+            box-shadow: 0 0 0 black;
+            transition: all 0.2s;
+        }
+
+            .btn2:last-child {
+                margin: 0;
+            }
+
+            .btn2:hover {
+                box-shadow: 0.4rem 0.4rem 0 black;
+                transform: translate(-0.4rem, -0.4rem);
+            }
+
+            .btn2:active {
+                box-shadow: 0 0 0 black;
+                transform: translate(0, 0);
+            }
+
+        .options {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+
+
+
+
+        body {
+            background: #F1F3FA;
+        }
+
+        /* Profile container */
+        .profile {
+            margin: 20px 0;
+        }
+
+        /* Profile sidebar */
+        .profile-sidebar {
+            padding: 20px 0 10px 0;
+            background: #fff;
+        }
+
+
+
+        .profile-usertitle {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .profile-usertitle-name {
+            color: #5a7391;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .profile-usertitle-job {
+            text-transform: uppercase;
+            color: #5b9bd1;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+
+
+
+
+
+
+
+
+
+        .profile-usermenu ul li:last-child {
+            border-bottom: none;
+        }
+
+
+
+
+        .list-group-item {
+            color: #93A3B5;
+        }
+
+            .list-group-item:hover {
+                color: #5B9BD1;
+                background-color: #FAFCFD
+            }
+
+
+        /* Profile Content */
+        .profile-content {
+            padding: 20px;
+            background: #fff;
+            /*min-height: 460px;*/
+        }
+
+        .is-active {
+            background-color: #F6F9FB !important;
+            color: #5B9BD1 !important;
+            border-left: 2px solid #5B9BD1 !important;
+        }
+
+        .w3-button {
+            font-weight: 600;
+        }
+
+        .container {
+            margin: 0px;
+            border: 2px solid red;
+        }
+    </style>
 </head>
 <body>
 
 
-    <div class="card" style="position: fixed; width: 18rem; height: 100vh; background-color: red">
-        <div style="width: 100%;">
-            <h1>E-Learning</h1>
+
+    <div class="con" style="width: 100vw !important">
+        <div class=" profile" style="display: flex; padding: 0 40px">
+            <div class="col-md-2" style="margin-right: 15px; border-radius: 10px">
+                <div class="profile-sidebar">
+                    <div class="profile-usertitle">
+                        <div class="profile-usertitle-name">
+                            E learning
+				
+                        </div>
+                        <div class="profile-usertitle-job">
+                            Online learning platform
+				
+                        </div>
+                    </div>
+
+                    <div class="profile-usermenu">
+
+
+                        <ul class="nav list-group list-group-flush">
+                            <li class="list-group-item" id="homepageItem">
+                                <asp:HyperLink ID="linkHomepage" runat="server" Text="Homepage" NavigateUrl="~/features/homepage/homepage.aspx" CssClass="w3-bar-item w3-button"></asp:HyperLink>
+                            </li>
+                            <li class="list-group-item" id="studentItem">
+                                <asp:HyperLink ID="linkCreateUser" runat="server" Text="Student" NavigateUrl="~/features/student/student-inspect.aspx" CssClass="w3-bar-item w3-button"></asp:HyperLink>
+                            </li>
+                            <li class="list-group-item" id="courseItem">
+                                <asp:HyperLink ID="HyperLink2" runat="server" Text="Course" NavigateUrl="~/features/course/course-inspect.aspx" CssClass="w3-bar-item w3-button"></asp:HyperLink>
+                            </li>
+                            <li class="list-group-item" id="instructorItem">
+                                <asp:HyperLink ID="instructorLink" runat="server" Text="Instructor" NavigateUrl="~/features/instructor/instructor-inspect.aspx" CssClass="w3-bar-item w3-button"></asp:HyperLink>
+                            </li>
+
+                            <li class="list-group-item" id="lessonItem">
+                                <asp:HyperLink ID="lessonLink" runat="server" Text="Lesson" NavigateUrl="~/features/lesson/lesson-inspect.aspx" CssClass="w3-bar-item w3-button"></asp:HyperLink>
+                            </li>
+                            <li class="list-group-item" id="enrollItem">
+                                <asp:HyperLink ID="enrollLink" runat="server" Text="Enroll Student" NavigateUrl="~/features/enroll/enroll-inspect.aspx" CssClass="w3-bar-item w3-button"></asp:HyperLink>
+                            </li>
+                            <li class="list-group-item" id="assignInsItem">
+                                <asp:HyperLink ID="assignInsLink" runat="server" Text="Assign Instructor" NavigateUrl="~/features/assign-ins/assign-ins-inspect.aspx" CssClass="w3-bar-item w3-button"></asp:HyperLink>
+                            </li>
+                            <li class="list-group-item" id="progressItem">
+                                <asp:HyperLink ID="progressLink" runat="server" Text="Progress" NavigateUrl="~/features/Progress/progress.aspx" CssClass="w3-bar-item w3-button"></asp:HyperLink>
+                            </li>
+                            <li class="list-group-item" id="reportItem">
+                                <asp:HyperLink ID="reportLink" runat="server" Text="Report" NavigateUrl="~/features/report/std-report.aspx" CssClass="w3-bar-item w3-button"></asp:HyperLink>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- END MENU -->
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="profile-content">
+                   
+                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                    </asp:ContentPlaceHolder>
+                </div>
+            </div>
         </div>
-        <ul class="list-group list-group-flush">
-        <li class="list-group-item" id="studentItem">
-            <asp:HyperLink ID="linkCreateUser" runat="server" Text="Student" NavigateUrl="~/features/student/student-inspect.aspx" CssClass="w3-bar-item w3-button" ></asp:HyperLink>
-        </li>
-        <li class="list-group-item" id="courseItem">
-           <asp:HyperLink ID="HyperLink2" runat="server" Text="Course" NavigateUrl="~/features/course/course-inspect.aspx" CssClass="w3-bar-item w3-button" ></asp:HyperLink>
-        </li>
-        <li class="list-group-item" id="instructorItem"> 
-            <asp:HyperLink ID="HyperLink1" runat="server" Text="Instructor" NavigateUrl="~/features/instructor/instructor-inspect.aspx" CssClass="w3-bar-item w3-button" ></asp:HyperLink>
-        </li>
-    </ul>
     </div>
 
-    <div class="content-divider">
 
 
-        <div class="content-host container" style="margin-left: 200px">
-
-            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
-            </asp:ContentPlaceHolder>
-        </div>
-    </div>
 
 
-   <script>
+    <script>
     // Get the current page URL
-    var currentPageUrl = window.location.href;
+     var currentPageUrl = window.location.href;
 
-    // Function to highlight the active list item
-    function highlightActiveItem() {
-        // Check if the current URL contains "student" and highlight the corresponding list item
-        if (currentPageUrl.includes("student")) {
-            document.getElementById("studentItem").classList.add("active");
-        } else if (currentPageUrl.includes("course")) {
-            document.getElementById("courseItem").classList.add("active");
-        } else if (currentPageUrl.includes("instructor")) {
-            document.getElementById("instructorItem").classList.add("active");
-        }
-    }
+     // Function to highlight the active list item
+     function highlightActiveItem() {
+         // Check if the current URL contains "student" and highlight the corresponding list item
+         if (currentPageUrl.includes("student")) {
+             document.getElementById("studentItem").classList.add("is-active");
+         } else if (currentPageUrl.includes("course")) {
+             document.getElementById("courseItem").classList.add("is-active");
+         } else if (currentPageUrl.includes("homepage")) {
+             document.getElementById("homepageItem").classList.add("is-active");
+         } else if (currentPageUrl.includes("instructor")) {
+             document.getElementById("instructorItem").classList.add("is-active");
+         }else if (currentPageUrl.includes("lesson")) {
+             document.getElementById("lessonItem").classList.add("is-active");
+         }else if (currentPageUrl.includes("progress")) {
+             document.getElementById("progressItem").classList.add("is-active");
+         }else if (currentPageUrl.includes("enroll")) {
+             document.getElementById("enrollItem").classList.add("is-active");
+         } else if (currentPageUrl.includes("assign-ins")) {
+             document.getElementById("assignInsItem").classList.add("is-active");
+         }else if (currentPageUrl.includes("report")) {
+             document.getElementById("reportItem").classList.add("is-active");
+         }
+     }
 
-    // Call the function to highlight the active list item when the page loads
-    window.onload = highlightActiveItem;
-   </script>
+     // Call the function to highlight the active list item when the page loads
+     window.onload = highlightActiveItem;
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+
+
 </body>
 </html>

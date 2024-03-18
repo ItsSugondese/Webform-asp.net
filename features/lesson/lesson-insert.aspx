@@ -1,9 +1,9 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="course-insert.aspx.cs" MasterPageFile="~/MasterPage.master" Inherits="features_course_course_insert" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="lesson-insert.aspx.cs" MasterPageFile="~/MasterPage.master" Inherits="features_course_course_insert" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
      <div style="display: flex; align-items: center; color: #A62A22">
      <i class="fa fa-arrow-left"></i>
-     <a style="margin-left: 3px" href="course-inspect.aspx">Go Back</a>
+     <a style="margin-left: 3px" href="lesson-inspect.aspx">Go Back</a>
  </div>
     <div class="registration-form">
     <form id="form1" runat="server">
@@ -13,15 +13,24 @@
     <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
         <ContentTemplate>
-        <div class="form-group">
             <div class="form-group">
-                <asp:TextBox ID="courseNameBox" runat="server" CssClass="form-control item" Placeholder="Course Title"></asp:TextBox>
-                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="courseNameBox" ErrorMessage="Course title is required" ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
+                <asp:TextBox ID="lessonNoBox" runat="server" CssClass="form-control item" Placeholder="Lesson Number" type="number"></asp:TextBox>
+                <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="lessonNoBox" ErrorMessage="Lesson No. is required" ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
+            </div>
+            <div class="form-group">
+                <asp:TextBox ID="lessonNameBox" runat="server" CssClass="form-control item" Placeholder="Lesson Title"></asp:TextBox>
+                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="lessonNameBox" ErrorMessage="Lesson title is required" ForeColor="Red" Display="Dynamic"></asp:RequiredFieldValidator>
             </div>
             
+            <div class="form-group">
+                <asp:DropDownList ID="ddlOptions" runat="server" AutoPostBack="true" Width="100%" CssClass="select" >
+    <asp:ListItem Text="Select a course" Value=""></asp:ListItem>
+</asp:DropDownList>
+            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlOptions" Display="Dynamic" ErrorMessage="Please select a course" ForeColor="Red"></asp:RequiredFieldValidator>
+            </div>
             <asp:Button ID="Button1" runat="server" Text="Create" CssClass="btn btn-block create-account" OnClick="Button1_Click" OnClientClick=" myFunction();" />
    
-</div>
+
         </ContentTemplate>
         <Triggers>
             <asp:AsyncPostBackTrigger ControlID="Button1" EventName="Click" />
@@ -45,8 +54,10 @@
         function myFunction() {
             // Get the snackbar DIV
 
-            var name = document.getElementById('<%= courseNameBox.ClientID %>').value;
-            if (name.trim() !== '') {
+            var name = document.getElementById('<%= lessonNameBox.ClientID %>').value;
+            var lesson = document.getElementById('<%= lessonNoBox.ClientID %>').value;
+            console.log(lesson)
+            if (name.trim() !== '' && lesson.trim() !== '') {
                 var x = document.getElementById("snackbar");
 
                 // Add the "show" class to DIV

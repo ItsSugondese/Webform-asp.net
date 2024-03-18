@@ -28,35 +28,18 @@ public partial class features_instructor_instructor_inspect : System.Web.UI.Page
         Button btnEdit = (Button)sender;
         GridViewRow row = (GridViewRow)btnEdit.NamingContainer;
         string id = GridView1.DataKeys[row.RowIndex].Value.ToString();
-
+        int sid = Convert.ToInt32(GridView1.DataKeys[row.RowIndex].Values["sid"]);
+        int cid = Convert.ToInt32(GridView1.DataKeys[row.RowIndex].Values["cid"]);
+        int lid = Convert.ToInt32(GridView1.DataKeys[row.RowIndex].Values["lid"]);
         // Redirect to the edit page, passing the ID as a query parameter
-        Response.Redirect("course-insert.aspx?id=" + id);
+        Response.Redirect($"progress-insert.aspx?id={sid}&cid={cid}&lid={lid}");
 
 
     }
     
     protected void btnDelete_Click(object sender, EventArgs e)
     {
-        if (con.State == ConnectionState.Closed)
-        {
-            con.Open();
-        }
-        // Retrieve the ID of the row being edited
-        Button btnDelete = (Button)sender;
-        GridViewRow row = (GridViewRow)btnDelete.NamingContainer;
-        decimal id = decimal.Parse(GridView1.DataKeys[row.RowIndex].Value.ToString());
-
-        string sqlQuery =  @"DELETE FROM ""C##ROHAN"".COURSE_INSTRUCTOR
-                                WHERE INSTRUCTOR_ID = :id";
-
-        OracleCommand cmd = new OracleCommand(sqlQuery, con);
-
-
-
-        cmd.BindByName = true;
-        cmd.Parameters.Add("id", OracleDbType.Decimal).Value = id;
-        cmd.ExecuteNonQuery();
-
+       
 
     }
 
@@ -65,9 +48,14 @@ public partial class features_instructor_instructor_inspect : System.Web.UI.Page
         // Get the ID of the row being deleted
         int id = int.Parse((GridView1.DataKeys[e.RowIndex].Value).ToString());
 
+        int sid = Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Values["sid"]);
+        int cid = Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Values["cid"]);
+        int lid = Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Values["lid"]);
         // Delete the row from the database using SqlDataSource control
         SqlDataSource1.DeleteParameters.Clear();
-        SqlDataSource1.DeleteParameters.Add("ID", id.ToString());
+        SqlDataSource1.DeleteParameters.Add("lid", lid.ToString());
+        SqlDataSource1.DeleteParameters.Add("cid", cid.ToString());
+        SqlDataSource1.DeleteParameters.Add("sid", id.ToString());
         SqlDataSource1.Delete();
     }
 

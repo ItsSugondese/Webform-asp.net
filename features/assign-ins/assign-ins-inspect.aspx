@@ -1,30 +1,31 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="course-inspect.aspx.cs" MasterPageFile="~/MasterPage.master" Inherits="features_instructor_instructor_inspect" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="assign-ins-inspect.aspx.cs" MasterPageFile="~/MasterPage.master" Inherits="features_instructor_instructor_inspect" %>
 
 
 
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <div class="add-new" style="display:flex; justify-content: end; margin-bottom: 10px;">
-    <a href="course-insert.aspx">Add New Course</a>
+    <a href="lesson-insert.aspx">Add New Lesson</a>
 </div>
     <form id="form1" class="grid-form" runat="server">
         <div>
-            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="ID" DataSourceID="SqlDataSource1" OnRowDeleting="GridView1_RowDeleting" OnSelectedIndexChanged="GridView1_SelectedIndexChanged" Width="100%">
+            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="sno" DataSourceID="SqlDataSource1" OnRowDeleting="GridView1_RowDeleting" OnSelectedIndexChanged="GridView1_SelectedIndexChanged" Width="100%">
     <Columns>
         <asp:BoundField DataField="sno" HeaderText="S.No." ReadOnly="True" SortExpression="ID"  ItemStyle-CssClass="auto-width-cell" />
-<asp:BoundField DataField="NAME" HeaderText="Course Title" SortExpression="" />
-        <asp:TemplateField HeaderText="Actions" ItemStyle-CssClass="set-all-width">
-            <ItemTemplate>
-                <asp:Button ID="btnEdit" runat="server" Text="Edit" CssClass="btn btn-primary" OnClick="btnEdit_Click" />
-                <asp:Button ID="btnDelete" runat="server" Text="Delete" CssClass="btn btn-danger" CommandName="Delete" />
-            </ItemTemplate>
-        </asp:TemplateField>
+        <asp:BoundField DataField="stdName" HeaderText="Student Name" ReadOnly="True" SortExpression="ID"  />
+<asp:BoundField DataField="email" HeaderText="Student email" SortExpression="" />
+<asp:BoundField DataField="ins" HeaderText="Instructor Name" SortExpression="" />
+<asp:BoundField DataField="course" HeaderText="Course Title" SortExpression="" />
+        
     </Columns>
 </asp:GridView>
 <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>"
     ProviderName="<%$ ConnectionStrings:ConnectionString.ProviderName %>"
-    SelectCommand="SELECT COURSE_ID AS id, COURSE_NAME AS name,   ROW_NUMBER() OVER (ORDER BY COURSE_ID) AS sno FROM COURSE c "
-    DeleteCommand="DELETE FROM COURSE WHERE COURSE_ID = :ID">
+    SelectCommand="SELECT s.STUDENT_NAME AS stdName, s.EMAIL AS email, 
+ci.INSTRUCTOR_NAME AS ins, c.COURSE_NAME AS course, ROW_NUMBER() OVER (ORDER BY ics.INSTRUCTOR_ID) AS sno
+FROM INSTRUCTOR_COURSE_STUDENT ics JOIN STUDENTS s ON s.S_NO = ics.STUDENT_NO 
+JOIN COURSE c ON c.COURSE_ID = ics.COURSE_ID JOIN COURSE_INSTRUCTOR ci ON ci.INSTRUCTOR_ID = ics.INSTRUCTOR_ID "
+    DeleteCommand="DELETE FROM LESSON WHERE id = :ID">
     <DeleteParameters>
         <asp:Parameter Name="ID" Type="Int32" />
     </DeleteParameters>

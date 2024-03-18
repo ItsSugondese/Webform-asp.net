@@ -10,7 +10,7 @@ public class InstructorForeignPayload
     public int id;
     public String name;
 
-    public static List<InstructorForeignPayload> FetchStudentPayloadFromDatabase(OracleConnection con)
+    public static List<InstructorForeignPayload> FetchInstructorPayloadFromDatabase(OracleConnection con)
     {
         List<InstructorForeignPayload> instructors = new List<InstructorForeignPayload>();
 

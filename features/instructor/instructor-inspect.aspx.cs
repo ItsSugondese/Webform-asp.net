@@ -13,11 +13,11 @@ using System.Xml.Linq;
 public partial class features_instructor_instructor_inspect : System.Web.UI.Page
 {
     OracleConnection con = new OracleConnection(ConfigurationManager.ConnectionStrings["odb"].ConnectionString);
-
+    string id = "0";
     protected void Page_Load(object sender, EventArgs e)
     {
 
-       
+
 
 
     }
@@ -34,7 +34,7 @@ public partial class features_instructor_instructor_inspect : System.Web.UI.Page
 
 
     }
-    
+
     protected void btnDelete_Click(object sender, EventArgs e)
     {
         if (con.State == ConnectionState.Closed)
@@ -46,7 +46,12 @@ public partial class features_instructor_instructor_inspect : System.Web.UI.Page
         GridViewRow row = (GridViewRow)btnDelete.NamingContainer;
         decimal id = decimal.Parse(GridView1.DataKeys[row.RowIndex].Value.ToString());
 
-        string sqlQuery =  @"DELETE FROM ""C##ROHAN"".COURSE_INSTRUCTOR
+
+
+
+
+
+        string sqlQuery = @"DELETE FROM ""C##ROHAN"".COURSE_INSTRUCTOR
                                 WHERE INSTRUCTOR_ID = :id";
 
         OracleCommand cmd = new OracleCommand(sqlQuery, con);
@@ -56,19 +61,26 @@ public partial class features_instructor_instructor_inspect : System.Web.UI.Page
         cmd.BindByName = true;
         cmd.Parameters.Add("id", OracleDbType.Decimal).Value = id;
         cmd.ExecuteNonQuery();
+        Response.Redirect("instructor-inspect.aspx");
 
 
     }
 
     protected void GridView1_RowDeleting(object sender, GridViewDeleteEventArgs e)
     {
+
         // Get the ID of the row being deleted
         int id = int.Parse((GridView1.DataKeys[e.RowIndex].Value).ToString());
 
         // Delete the row from the database using SqlDataSource control
         SqlDataSource1.DeleteParameters.Clear();
         SqlDataSource1.DeleteParameters.Add("ID", id.ToString());
+
+        Response.Write(id.ToString());
         SqlDataSource1.Delete();
+
+        Response.Redirect("instructor-inspect.aspx");
+
     }
 
 
@@ -83,5 +95,16 @@ public partial class features_instructor_instructor_inspect : System.Web.UI.Page
     protected void GridView1_SelectedIndexChanged(object sender, EventArgs e)
     {
 
+    }
+
+
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+
+        string inputValue = Request.Form["myInput"];
+        Response.Write("Am here " + idBox.Text.ToString());
+        Button btnDelete = (Button)sender;
+        GridViewRow row = (GridViewRow)btnDelete.NamingContainer;
+        id = GridView1.DataKeys[row.RowIndex].Value.ToString();
     }
 }

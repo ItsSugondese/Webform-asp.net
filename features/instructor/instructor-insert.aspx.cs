@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using Oracle.ManagedDataAccess.Client;
 using System.Configuration;
 using System.Data;
+using System.Threading;
 
 public partial class features_instructor_instructor_insert : System.Web.UI.Page
 {
@@ -25,6 +26,15 @@ public partial class features_instructor_instructor_insert : System.Web.UI.Page
                 int id = int.Parse(param);
                 payload = InstructorGetPayload.GetInstructorById(con, id);
                 nameBox.Text = payload.name;
+                snackbarSpan.InnerText = "Instructor Updated Successfully.";
+                registerSpan.InnerText = "Update Instructor";
+                Button1.Text = "Update";
+            }
+            else
+            {
+                registerSpan.InnerText = "Register Instructor";
+                snackbarSpan.InnerText = "Instructor Saved Successfully.";
+                Button1.Text = "Create";
             }
         }
     }
@@ -73,6 +83,14 @@ WHERE INSTRUCTOR_ID= :id";
         cmd.Parameters.Add("id", OracleDbType.Decimal).Value = nextVal;
         cmd.Parameters.Add("name", OracleDbType.Varchar2).Value = name;
         cmd.ExecuteNonQuery();
+
+        if (!exists)
+        {
+            Thread.Sleep(1000);
+
+            // Redirect to another page
+            Response.Redirect("instructor-inspect.aspx");
+        }
     }
 
    

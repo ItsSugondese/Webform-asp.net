@@ -14,15 +14,13 @@ using System.Web.UI.WebControls;
 public partial class features_course_course_insert : System.Web.UI.Page
 {
     OracleConnection con = new OracleConnection(ConfigurationManager.ConnectionStrings["odb"].ConnectionString);
-    CourseGetPayload payload = new CourseGetPayload();
+    LessonGetPayload payload = new LessonGetPayload();
 
 
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        snackbarSpan.InnerText = "Course Updated Successfully.";
-        registerSpan.InnerText = "Update Course";
-        Button1.Text = "Update";
+       
         if (!IsPostBack)
         {
             String param = Request.QueryString["id"];
@@ -30,23 +28,42 @@ public partial class features_course_course_insert : System.Web.UI.Page
             {
                 con.Open();
             }
-         
+            List<CourseGetPayload> courses = CourseGetPayload.FetchCoursePayloadFromDatabase(con);
+
+            foreach (CourseGetPayload course in courses)
+            {
+
+                ddlOptions.Items.Add(new ListItem(course.name, course.id.ToString()));
+            }
 
             // Perform the existence check
             if (!string.IsNullOrEmpty(param))
             {
                 int id = int.Parse(param);
-                payload = CourseGetPayload.GetCourseById(con, id);
-                courseNameBox.Text = payload.name;
-                snackbarSpan.InnerText = "Course Updated Successfully.";
-                registerSpan.InnerText = "Update Course";
+                payload = LessonGetPayload.GetLessonById(con, id);
+                lessonNameBox.Text = payload.name;
+                lessonNoBox.Text = payload.lessonNo.ToString();
+                snackbarSpan.InnerText = "Lesson Updated Successfully.";
+                registerSpan.InnerText = "Update Lesson";
                 Button1.Text = "Update";
 
+                foreach (ListItem item in ddlOptions.Items)
+                {
+                    // Check if the item's value matches the value you want to select
+                    if (item.Text == payload.courseName)
+                    {
+                        // Set the item as selected
+                        item.Selected = true;
+
+                        // Break out of the loop since we found the item to select
+                        break;
+                    }
+                }
             }
             else
             {
-                registerSpan.InnerText = "Create Course";
-                snackbarSpan.InnerText = "Course Saved Successfully.";
+                registerSpan.InnerText = "Create Lesson";
+                snackbarSpan.InnerText = "Lesson Created Successfully.";
                 Button1.Text = "Create";
             }
             // Fetch data from the database
@@ -54,17 +71,17 @@ public partial class features_course_course_insert : System.Web.UI.Page
     }
 
 
-
     protected void Button1_Click(object sender, EventArgs e)
     {
-        String name = courseNameBox.Text;
+        String name = lessonNameBox.Text;
+        int selectedCourseId = int.Parse((ddlOptions.SelectedItem).Value);
         bool exists = EditHelper.checkIfExits(Request);
         con.Open();
-        string sqlQuery = !exists ? @"INSERT INTO ""C##ROHAN"".COURSE
-(COURSE_ID, COURSE_NAME)
-VALUES(:id, :name)" : @"UPDATE ""C##ROHAN"".COURSE
-SET COURSE_NAME=:name
-WHERE COURSE_ID= :id";
+        string sqlQuery = !exists ? @"INSERT INTO ""C##ROHAN"".LESSON
+(ID, LESSON_NO, LESSON_TITLE, COURSE_ID)
+VALUES(:id, :lessonNo, :name, :course)" : @"UPDATE ""C##ROHAN"".LESSON
+SET LESSON_NO=:lessonNo, LESSON_TITLE=:name, COURSE_ID=:course
+WHERE ID= :id";
         OracleCommand cmd = new OracleCommand(sqlQuery, con);
 
        
@@ -77,7 +94,7 @@ WHERE COURSE_ID= :id";
         if (!exists)
         {
             OracleCommand sequenceCommand = con.CreateCommand();
-        sequenceCommand.CommandText = "SELECT course_seq.NEXTVAL FROM DUAL";
+        sequenceCommand.CommandText = "SELECT lesson_seq.NEXTVAL FROM DUAL";
             nextVal = sequenceCommand.ExecuteScalar();
         }
         else
@@ -91,7 +108,9 @@ WHERE COURSE_ID= :id";
 
         cmd.BindByName = true;
         cmd.Parameters.Add("id", OracleDbType.Decimal).Value = nextVal;
+        cmd.Parameters.Add("lessonNo", OracleDbType.Decimal).Value = int.Parse( lessonNoBox.Text);
         cmd.Parameters.Add("name", OracleDbType.Varchar2).Value = name;
+        cmd.Parameters.Add("course", OracleDbType.Decimal).Value = selectedCourseId;
         cmd.ExecuteNonQuery();
 
         if (!exists)
@@ -99,7 +118,7 @@ WHERE COURSE_ID= :id";
             Thread.Sleep(1000);
 
             // Redirect to another page
-            Response.Redirect("course-inspect.aspx");
+            Response.Redirect("lesson-inspect.aspx");
         }
     }
 

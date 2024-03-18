@@ -30,7 +30,7 @@ public partial class features_instructor_instructor_inspect : System.Web.UI.Page
         string id = GridView1.DataKeys[row.RowIndex].Value.ToString();
 
         // Redirect to the edit page, passing the ID as a query parameter
-        Response.Redirect("instructor-insert.aspx?id=" + id);
+        Response.Redirect("student-insert.aspx?id=" + id);
 
 
     }

@@ -12,11 +12,34 @@ using static System.Net.Mime.MediaTypeNames;
 public partial class features_student_details : System.Web.UI.Page
 {
     OracleConnection con = new OracleConnection(ConfigurationManager.ConnectionStrings["odb"].ConnectionString);
+    StudentPayload payload = new StudentPayload();
 
     protected void Page_Load(object sender, EventArgs e)
     {
-       
-            
+        String param = Request.QueryString["id"];
+
+        // Perform the existence check
+        if (!string.IsNullOrEmpty(param))
+        {
+            con.Open();
+            int id = int.Parse(param);
+            payload = StudentPayload.FetchStudentPayloadByIdFromDatabase(con, id);
+            nameBox.Text = payload.name;
+            emailBox.Text = payload.email;
+            dobBox.Text = payload.name;
+            contactBox.Text = payload.name;
+            countryDropdown.SelectedValue = payload.country;
+            snackbarSpan.InnerText = "Student Updated Successfully.";
+            registerSpan.InnerText = "Update Instructor";
+            Button1.Text = "Update";
+        }
+        else
+        {
+            registerSpan.InnerText = "Register Instructor";
+            snackbarSpan.InnerText = "Student Saved Successfully.";
+            Button1.Text = "Create";
+        }
+
     }
 
     protected void countryDropdown_SelectedIndexChanged(object sender, EventArgs e)
