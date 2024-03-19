@@ -12,9 +12,9 @@
                                     <asp:TextBox ID="idBox" runat="server" CssClass="" Visible="False" 
                                         ClientIDMode="Static"></asp:TextBox>
         <div class="table-grid auto-style1">
-            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="ID" DataSourceID="SqlDataSource1" OnRowDeleting="GridView1_RowDeleting" OnSelectedIndexChanged="GridView1_SelectedIndexChanged" Width="100%">
+            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="ID" DataSourceID="SqlDataSource1" OnRowDeleting="GridView1_RowDeleting" OnSelectedIndexChanged="GridView1_SelectedIndexChanged" Width="100%" AllowSorting="True">
                 <Columns>
-                    <asp:BoundField DataField="sno" HeaderText="S.No." ReadOnly="True" SortExpression="ID" ItemStyle-CssClass="auto-width-cell" />
+                    <asp:BoundField DataField="sno" HeaderText="S.No." ReadOnly="True" SortExpression="sno" ItemStyle-CssClass="auto-width-cell" />
                     <asp:BoundField DataField="NAME" HeaderText="NAME" SortExpression="NAME" />
                     <asp:TemplateField HeaderText="Actions">
                         <ItemTemplate>

@@ -39,7 +39,7 @@ public partial class features_instructor_instructor_inspect : System.Web.UI.Page
    JOIN COURSE c ON c.COURSE_ID = se.course_id
   WHERE EXTRACT(MONTH FROM enroll_date) = :month
   AND EXTRACT(YEAR FROM enroll_date) = :year
- GROUP BY c.COURSE_NAME, c.COURSE_ID ORDER BY total desc ";
+ GROUP BY c.COURSE_NAME, c.COURSE_ID ORDER BY total desc FETCH FIRST 3 ROWS ONLY ";
 
         // Execute the query and retrieve data into a DataTable or other data structure
         DataTable dataTable = GetDataFromDatabase(query);

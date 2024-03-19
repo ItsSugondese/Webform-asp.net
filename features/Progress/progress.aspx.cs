@@ -46,7 +46,6 @@ public partial class features_instructor_instructor_inspect : System.Web.UI.Page
     protected void GridView1_RowDeleting(object sender, GridViewDeleteEventArgs e)
     {
         // Get the ID of the row being deleted
-        int id = int.Parse((GridView1.DataKeys[e.RowIndex].Value).ToString());
 
         int sid = Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Values["sid"]);
         int cid = Convert.ToInt32(GridView1.DataKeys[e.RowIndex].Values["cid"]);
@@ -55,7 +54,7 @@ public partial class features_instructor_instructor_inspect : System.Web.UI.Page
         SqlDataSource1.DeleteParameters.Clear();
         SqlDataSource1.DeleteParameters.Add("lid", lid.ToString());
         SqlDataSource1.DeleteParameters.Add("cid", cid.ToString());
-        SqlDataSource1.DeleteParameters.Add("sid", id.ToString());
+        SqlDataSource1.DeleteParameters.Add("sid", sid.ToString());
         SqlDataSource1.Delete();
     }
 

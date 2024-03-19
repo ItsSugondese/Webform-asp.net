@@ -4,9 +4,6 @@
 
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-    <div class="add-new" style="display:flex; justify-content: end; margin-bottom: 10px;">
-    <a href="lesson-insert.aspx">Add New Lesson</a>
-</div>
     <form id="form1" class="grid-form" runat="server">
         <div>
             <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="sno" DataSourceID="SqlDataSource1" OnRowDeleting="GridView1_RowDeleting" OnSelectedIndexChanged="GridView1_SelectedIndexChanged" Width="100%">
@@ -23,7 +20,7 @@
     ProviderName="<%$ ConnectionStrings:ConnectionString.ProviderName %>"
     SelectCommand="SELECT s.STUDENT_NAME AS stdName, s.EMAIL AS email, 
 ci.INSTRUCTOR_NAME AS ins, c.COURSE_NAME AS course, ROW_NUMBER() OVER (ORDER BY ics.INSTRUCTOR_ID) AS sno
-FROM INSTRUCTOR_COURSE_STUDENT ics JOIN STUDENTS s ON s.S_NO = ics.STUDENT_NO 
+FROM INSTRUCTOR_COURSE_STUDENT ics JOIN STUDENT s ON s.S_NO = ics.s_no 
 JOIN COURSE c ON c.COURSE_ID = ics.COURSE_ID JOIN COURSE_INSTRUCTOR ci ON ci.INSTRUCTOR_ID = ics.INSTRUCTOR_ID "
     DeleteCommand="DELETE FROM LESSON WHERE id = :ID">
     <DeleteParameters>

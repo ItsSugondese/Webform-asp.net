@@ -22,13 +22,13 @@ public class ProgessGetPayload
         // SQL query
         string query = $@"SELECT  s.STUDENT_NAME AS name, s.EMAIL as email, l.LESSON_NO || '. ' || l.LESSON_TITLE AS title, 
 sp.LESSON_STATUS AS status , to_char(sp.LAST_ACCESSED_DATE, 'YYYY-MM-DD') AS accDate,
-l.ID AS lid, sp.COURSE_ID AS cid, s.S_NO AS sid,
+l.ID AS lid, l.COURSE_ID AS cid, s.S_NO AS sid,
 c.COURSE_NAME as course 
 FROM STUDENT_PROGRESS sp 
-JOIN STUDENTS s ON s.S_NO = sp.S_NO 
+JOIN STUDENT s ON s.S_NO = sp.S_NO 
 JOIN LESSON l ON l.ID = sp.LESSON_ID 
-JOIN COURSE c ON c.COURSE_ID  = sp.COURSE_ID  
-WHERE sp.COURSE_ID = {cid} AND sp.LESSON_ID = {lid} AND sp.S_NO = {id}";
+JOIN COURSE c ON c.COURSE_ID  = l.COURSE_ID  
+WHERE l.COURSE_ID = {cid} AND sp.LESSON_ID = {lid} AND sp.S_NO = {id}";
 
 
         using (OracleCommand command = new OracleCommand(query, con))

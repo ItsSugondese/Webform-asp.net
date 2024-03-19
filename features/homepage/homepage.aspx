@@ -77,7 +77,7 @@
     </div>
         <div style="display:flex; text-align: center; margin-top: 20px;justify-content: center">
             <div>
-            <h1>Studnet Enrollment data of <span runat="server" id="year"></span></h1>
+            <h1>Student Enrollment data of <span runat="server" id="year"></span></h1>
         <asp:Chart ID="Chart1" runat="server" DataSourceID="SqlDataSource1" Width="1116px" Height="488px"  >
             <series>
                 <asp:Series Name="Series1" XValueMember="MonthName" YValueMembers="EnrollmentCount">

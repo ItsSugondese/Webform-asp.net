@@ -21,7 +21,7 @@ public class StudentPayload
         List<StudentPayload> students = new List<StudentPayload>();
 
         // SQL query
-        string query = "SELECT s.S_NO AS id, s.STUDENT_NAME AS name, s.email as email FROM STUDENTS s"; // Assuming your table is named Instructors
+        string query = "SELECT s.S_NO AS id, s.STUDENT_NAME AS name, s.email as email FROM STUDENT s"; // Assuming your table is named Instructors
 
 
         using (OracleCommand command = new OracleCommand(query, con))
@@ -50,7 +50,7 @@ public class StudentPayload
         StudentPayload students = new StudentPayload();
 
         // SQL query
-        string query = "SELECT s.S_NO AS id, s.STUDENT_NAME AS name, s.CONTACT, s.DOB , s.EMAIL, s.country  FROM STUDENTS s \r\nWHERE s.S_NO  = " + id; 
+        string query = "SELECT s.S_NO AS id, s.STUDENT_NAME AS name, s.CONTACT,to_char(s.DOB, 'YYYY-MM-DD') as dob , s.EMAIL, s.country  FROM STUDENT s \r\nWHERE s.S_NO  = " + id; 
 
 
         using (OracleCommand command = new OracleCommand(query, con))

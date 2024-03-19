@@ -43,7 +43,7 @@ c.course_id as cid, c.COURSE_NAME AS course,
 to_Char(se.ENROLL_DATE, 'YYYY-MM-DD') AS enrollDate, 
 COALESCE (TO_CHAR(s.DOB, 'YYYY-MM-DD'), '-') AS dob, COALESCE (s.country, '-') AS country,
 COALESCE (s.CONTACT , '-')  AS contact
-FROM STUDENT_ENROLLMENT se  JOIN STUDENTS s ON s.S_NO  = se.S_NO 
+FROM STUDENT_ENROLLMENT se  JOIN STUDENT s ON s.S_NO  = se.S_NO 
 JOIN COURSE c ON c.COURSE_ID = se.COURSE_ID WHERE se.S_NO = :id";
 
         // Execute the query and retrieve data into a DataTable or other data structure

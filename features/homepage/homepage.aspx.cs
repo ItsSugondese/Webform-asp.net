@@ -61,7 +61,7 @@ public partial class features_instructor_instructor_inspect : System.Web.UI.Page
     
     private int getStudentCount()
     {
-        string query = "SELECT COUNT(*) AS total  FROM students c ";
+        string query = "SELECT COUNT(*) AS total  FROM student c ";
 
 
         using (OracleCommand command = new OracleCommand(query, con))

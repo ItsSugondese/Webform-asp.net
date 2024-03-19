@@ -125,10 +125,10 @@ public partial class features_course_course_insert : System.Web.UI.Page
         bool exists = EditHelper.checkIfExits(Request);
         con.Open();
         string sqlQuery = !exists ? @"INSERT INTO ""C##ROHAN"".STUDENT_PROGRESS
-(S_NO, LESSON_ID, COURSE_ID, LESSON_STATUS, LAST_ACCESSED_DATE)
-VALUES(:sid, :lid, :cid, :status, :accDate)" : @"UPDATE ""C##ROHAN"".STUDENT_PROGRESS
+(S_NO, LESSON_ID,  LESSON_STATUS, LAST_ACCESSED_DATE)
+VALUES(:sid, :lid,  :status, :accDate)" : @"UPDATE ""C##ROHAN"".STUDENT_PROGRESS
 SET LESSON_STATUS=:status, LAST_ACCESSED_DATE=:accDate
-WHERE S_NO=:sid AND LESSON_ID=:lid AND COURSE_ID=:cid";
+WHERE S_NO=:sid AND LESSON_ID=:lid";
         OracleCommand cmd = new OracleCommand(sqlQuery, con);
 
 
@@ -139,7 +139,6 @@ WHERE S_NO=:sid AND LESSON_ID=:lid AND COURSE_ID=:cid";
         cmd.Parameters.Add("lid", OracleDbType.Decimal).Value = selectedLessonId;
         cmd.Parameters.Add("accDate", OracleDbType.Date).Value = DateTime.Parse(accessBox.Text);
         cmd.Parameters.Add("status", OracleDbType.Varchar2).Value = statusBox.Text;
-        cmd.Parameters.Add("cid", OracleDbType.Decimal).Value = selectedCourseId;
         cmd.ExecuteNonQuery();
 
 

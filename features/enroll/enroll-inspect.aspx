@@ -30,9 +30,9 @@
     SelectCommand="SELECT ROW_NUMBER() OVER (ORDER BY se.S_NO) AS sno,
 s.STUDENT_NAME AS std, s.email as email, s.S_NO as sid, c.course_id as cid, c.COURSE_NAME AS course, to_Char(se.ENROLL_DATE, 'YYYY-MM-DD') AS enrollDate ,
 CASE WHEN ics.INSTRUCTOR_ID IS NULL THEN 'False' ELSE 'True' END AS hasInstructor
-FROM STUDENT_ENROLLMENT se  JOIN STUDENTS s ON s.S_NO  = se.S_NO 
+FROM STUDENT_ENROLLMENT se  JOIN STUDENT s ON s.S_NO  = se.S_NO 
 JOIN COURSE c ON c.COURSE_ID = se.COURSE_ID 
-LEFT JOIN INSTRUCTOR_COURSE_STUDENT ics ON ics.COURSE_ID = se.COURSE_ID AND ics.STUDENT_NO = se.S_NO  "
+LEFT JOIN INSTRUCTOR_COURSE_STUDENT ics ON ics.COURSE_ID = se.COURSE_ID AND ics.s_no = se.S_NO  "
     DeleteCommand="DELETE FROM STUDENT_ENROLLMENT
 WHERE S_NO=:sid AND COURSE_ID=:cid">
     <DeleteParameters>

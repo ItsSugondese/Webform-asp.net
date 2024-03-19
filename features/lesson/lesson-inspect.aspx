@@ -9,9 +9,9 @@
 </div>
     <form id="form1" class="grid-form" runat="server">
         <div>
-            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="ID" DataSourceID="SqlDataSource1" OnRowDeleting="GridView1_RowDeleting" OnSelectedIndexChanged="GridView1_SelectedIndexChanged" Width="100%">
+            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="ID" DataSourceID="SqlDataSource1" OnRowDeleting="GridView1_RowDeleting" OnSelectedIndexChanged="GridView1_SelectedIndexChanged" Width="100%" AllowSorting="True">
     <Columns>
-        <asp:BoundField DataField="sno" HeaderText="S.No." ReadOnly="True" SortExpression="ID"  ItemStyle-CssClass="auto-width-cell" />
+        <asp:BoundField DataField="sno" HeaderText="S.No." ReadOnly="True" SortExpression="sno"  ItemStyle-CssClass="auto-width-cell" />
         <asp:BoundField DataField="lessonNo" HeaderText="Lesson No." ReadOnly="True" SortExpression="ID"  />
 <asp:BoundField DataField="NAME" HeaderText="Lesson Title" SortExpression="" />
 <asp:BoundField DataField="course" HeaderText="Course Title" SortExpression="" />

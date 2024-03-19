@@ -34,13 +34,13 @@
             <HeaderTemplate>
                 <table border="1" style="width: 100%">
                     <tr>
-                        <%--<th>SNo</th>--%>
+                        <th>Instructor Id</th>
                         <th>Instructor Name</th>
                     </tr>
             </HeaderTemplate>
             <ItemTemplate>
                 <tr>
-                    <%--<td><%# Eval("sno") %></td>--%>
+                    <td><%# Eval("id") %></td>
                     <td><%# Eval("name") %></td>
                 </tr>
             </ItemTemplate>

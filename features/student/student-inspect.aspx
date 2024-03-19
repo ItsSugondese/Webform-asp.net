@@ -16,9 +16,10 @@
  </div>
     <form id="form1" runat="server">
         <div class="table-grid auto-style1">
-            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="studentNo" DataSourceID="SqlDataSource1" OnRowDeleting="GridView1_RowDeleting" OnSelectedIndexChanged="GridView1_SelectedIndexChanged"  Width="100%">
+            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="id" DataSourceID="SqlDataSource1" 
+                OnRowDeleting="GridView1_RowDeleting" OnSelectedIndexChanged="GridView1_SelectedIndexChanged"  Width="100%" AllowSorting="True">
     <Columns>
-        <asp:BoundField DataField="sno" HeaderText="S.No." ReadOnly="True" SortExpression="ID"  ItemStyle-CssClass="auto-width-cell" />
+        <asp:BoundField DataField="sno" HeaderText="S.No." ReadOnly="True" SortExpression="sno"  ItemStyle-CssClass="auto-width-cell" />
         <asp:BoundField DataField="NAME" HeaderText="Student Name" SortExpression="NAME" />
         <asp:BoundField DataField="email" HeaderText="Email" SortExpression="email" />
         <asp:BoundField DataField="contact" HeaderText="Contact" SortExpression="contact" />
@@ -34,9 +35,10 @@
 </asp:GridView>
 <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>"
     ProviderName="<%$ ConnectionStrings:ConnectionString.ProviderName %>"
-    SelectCommand="SELECT s.S_NO AS studentNo, s.STUDENT_NAME AS name, s.CONTACT, TO_CHAR(s.DOB, 'YYYY-MM-DD') AS dob, s.EMAIL, s.COUNTRY, ROW_NUMBER() OVER (ORDER BY S_NO) AS sno 
-FROM STUDENTS s"
-    DeleteCommand="DELETE FROM STUDENTS WHERE S_NO = :ID">
+    SelectCommand="SELECT s.S_NO AS id, s.STUDENT_NAME AS name, s.CONTACT, TO_CHAR(s.DOB, 'YYYY-MM-DD') AS dob, 
+    s.EMAIL, s.COUNTRY, ROW_NUMBER() OVER (ORDER BY S_NO) AS sno 
+FROM STUDENT s"
+    DeleteCommand="DELETE FROM STUDENT WHERE S_NO = :ID">
     <DeleteParameters>
         <asp:Parameter Name="ID" Type="Int32" />
     </DeleteParameters>

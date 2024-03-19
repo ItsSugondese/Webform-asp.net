@@ -16,16 +16,16 @@
  </div>
     <form id="form1" runat="server">
         <div class="table-grid auto-style1">
-            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="cid, sid, lid" DataSourceID="SqlDataSource1" OnRowDeleting="GridView1_RowDeleting" OnSelectedIndexChanged="GridView1_SelectedIndexChanged"  Width="100%">
+            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="sid,lid,cid" DataSourceID="SqlDataSource1" OnRowDeleting="GridView1_RowDeleting" OnSelectedIndexChanged="GridView1_SelectedIndexChanged"  Width="100%" AllowSorting="True">
     <Columns>
         <%--<asp:BoundField DataField="sno" HeaderText="S.No." ReadOnly="True" SortExpression="ID"  ItemStyle-CssClass="auto-width-cell" />--%>
   
         <asp:BoundField DataField="name" HeaderText="Student Name" SortExpression="email" />
         <asp:BoundField DataField="email" HeaderText="Email" SortExpression="email" />
-        <asp:BoundField DataField="course" HeaderText="Course" SortExpression="email" />
-        <asp:BoundField DataField="title" HeaderText="Lesson Title" SortExpression="email" />
-        <asp:BoundField DataField="status" HeaderText="Lesson Status" SortExpression="contact" />
-        <asp:BoundField DataField="accDate" HeaderText="Last Accessed Date" SortExpression="contact" />
+        <asp:BoundField DataField="course" HeaderText="Course" SortExpression="course" />
+        <asp:BoundField DataField="title" HeaderText="Lesson Title" SortExpression="title" />
+        <asp:BoundField DataField="status" HeaderText="Lesson Status" SortExpression="stats" />
+        <asp:BoundField DataField="accDate" HeaderText="Last Accessed Date" SortExpression="accDate" />
         <asp:TemplateField HeaderText="Actions">
             <ItemTemplate>
                 <asp:Button ID="btnEdit" runat="server" Text="Edit" CssClass="btn btn-primary" OnClick="btnEdit_Click" />
@@ -38,14 +38,16 @@
     ProviderName="<%$ ConnectionStrings:ConnectionString.ProviderName %>"
     SelectCommand="SELECT  s.STUDENT_NAME AS name, s.EMAIL, l.LESSON_TITLE AS title, 
 sp.LESSON_STATUS AS status , to_char(sp.LAST_ACCESSED_DATE, 'YYYY-MM-DD') AS accDate,
-l.ID AS lid, sp.COURSE_ID AS cid, s.S_NO AS sid,
+l.ID AS lid, l.COURSE_ID AS cid, s.S_NO AS sid,
 c.COURSE_NAME as course 
 FROM STUDENT_PROGRESS sp 
-JOIN STUDENTS s ON s.S_NO = sp.S_NO 
+JOIN STUDENT s ON s.S_NO = sp.S_NO 
 JOIN LESSON l ON l.ID = sp.LESSON_ID 
-JOIN COURSE c ON c.COURSE_ID  = sp.COURSE_ID "
-    DeleteCommand="DELETE FROM STUDENT_PROGRESS
-WHERE S_NO=:sid AND LESSON_ID=:lid AND COURSE_ID=:cid">
+JOIN COURSE c ON c.COURSE_ID  = l.COURSE_ID "
+    DeleteCommand="DELETE FROM STUDENT_PROGRESS 
+WHERE S_NO = :sid 
+  AND LESSON_ID = :lid 
+  AND LESSON_ID IN (SELECT ID FROM LESSON WHERE COURSE_ID = :cid) ">
     <DeleteParameters>
         <asp:Parameter Name="ID" Type="Int32" />
     </DeleteParameters>

@@ -8,6 +8,7 @@ using System.Data;
 using Oracle.ManagedDataAccess.Client;
 using System.Configuration;
 using static System.Net.Mime.MediaTypeNames;
+using System.Threading;
 
 public partial class features_student_details : System.Web.UI.Page
 {
@@ -16,28 +17,34 @@ public partial class features_student_details : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        String param = Request.QueryString["id"];
+        if (!IsPostBack)
+        {
+            String param = Request.QueryString["id"];
 
-        // Perform the existence check
-        if (!string.IsNullOrEmpty(param))
-        {
-            con.Open();
-            int id = int.Parse(param);
-            payload = StudentPayload.FetchStudentPayloadByIdFromDatabase(con, id);
-            nameBox.Text = payload.name;
-            emailBox.Text = payload.email;
-            dobBox.Text = payload.name;
-            contactBox.Text = payload.name;
-            countryDropdown.SelectedValue = payload.country;
-            snackbarSpan.InnerText = "Student Updated Successfully.";
-            registerSpan.InnerText = "Update Instructor";
-            Button1.Text = "Update";
-        }
-        else
-        {
-            registerSpan.InnerText = "Register Instructor";
-            snackbarSpan.InnerText = "Student Saved Successfully.";
-            Button1.Text = "Create";
+            // Perform the existence check
+            if (!string.IsNullOrEmpty(param))
+            {
+                if (con.State == ConnectionState.Closed)
+                {
+                    con.Open();
+                }
+                int id = int.Parse(param);
+                payload = StudentPayload.FetchStudentPayloadByIdFromDatabase(con, id);
+                nameBox.Text = payload.name;
+                emailBox.Text = payload.email;
+                dobBox.Text = payload.dob;
+                contactBox.Text = payload.name;
+                countryDropdown.SelectedValue = payload.country;
+                snackbarSpan.InnerText = "Student Updated Successfully.";
+                registerSpan.InnerText = "Update Student";
+                Button1.Text = "Update";
+            }
+            else
+            {
+                registerSpan.InnerText = "Register Student";
+                snackbarSpan.InnerText = "Student Saved Successfully.";
+                Button1.Text = "Create";
+            }
         }
 
     }
@@ -61,72 +68,58 @@ public partial class features_student_details : System.Web.UI.Page
             String contactGet = contactBox.Text;
             String dobGet = dobBox.Text;
             String countryGet = countryDropdown.SelectedValue;
+            bool exists = EditHelper.checkIfExits(Request);
 
-            con.Open();
-            string sqlQuery = @"INSERT INTO ""C##ROHAN"".STUDENTS
-                    (STUDENT_NAME, CONTACT, EMAIL, COUNTRY, s_no, dob)
-                    VALUES( :1, :2, :3, :4, :5, :6)";
+            if (con.State == ConnectionState.Closed)
+            {
+                con.Open();
+            }
+            string sqlQuery = !exists? @"INSERT INTO ""C##ROHAN"".STUDENT
+                    ( STUDENT_NAME, CONTACT, EMAIL, COUNTRY, s_no, dob)
+                    VALUES(  :name, :contact, :email, :country, :id, :dob)" : @"UPDATE ""C##ROHAN"".STUDENT
+SET STUDENT_NAME=:name, CONTACT=:contact, DOB=:dob, COUNTRY=:country, EMAIL=:email
+WHERE s_no=:id";
+
+
             OracleCommand cmd = new OracleCommand(sqlQuery, con);
 
-            OracleCommand sequenceCommand = con.CreateCommand();
-            sequenceCommand.CommandText = "SELECT student_seq.NEXTVAL FROM DUAL";
 
-            // Execute the query to get the next value from the sequence
-            object nextVal = sequenceCommand.ExecuteScalar();
-
-            decimal studentSequenceValue;
-
-            // Check if the nextVal is a valid numeric value before parsing
-                OracleParameter studentID = new OracleParameter();
-            if (nextVal != null && decimal.TryParse(nextVal.ToString(), out studentSequenceValue))
+            object nextVal;
+            if (!exists)
             {
-                studentID.OracleDbType = OracleDbType.Decimal;
-                studentID.Value = studentSequenceValue;
+                OracleCommand sequenceCommand = con.CreateCommand();
+                sequenceCommand.CommandText = "SELECT student_seq.NEXTVAL FROM DUAL";
+                nextVal = sequenceCommand.ExecuteScalar();
             }
             else
             {
-                throw new Exception("Invalid sequence value retrieved from database.");
+                nextVal = EditHelper.getIdIfEdit(Request);
             }
 
-            OracleParameter studentName = new OracleParameter();
-            studentName.OracleDbType = OracleDbType.Varchar2;
-            studentName.Value = name;
-            
-            OracleParameter contact = new OracleParameter();
-            contact.OracleDbType = OracleDbType.Varchar2;
-            contact.Value = string.IsNullOrEmpty(contactGet) ? (object)DBNull.Value : contactGet;
-            
-            OracleParameter dob = new OracleParameter();
-            dob.OracleDbType = OracleDbType.Date;
-            dob.Value = string.IsNullOrEmpty(dobGet) ? (object) DBNull.Value : DateTime.Parse(dobGet);
-            
-            
-            OracleParameter emailMeter = new OracleParameter();
-            emailMeter.OracleDbType = OracleDbType.Varchar2;
-            emailMeter.Value = email;
 
-            OracleParameter country = new OracleParameter();
-            country.OracleDbType = OracleDbType.Varchar2;
-            country.Value = string.IsNullOrEmpty(countryGet) ? (object)DBNull.Value : countryGet;
 
-           
 
-            cmd.Parameters.Add(studentName);
-            cmd.Parameters.Add(contact);
-            cmd.Parameters.Add(emailMeter);
-            cmd.Parameters.Add(country);
-            cmd.Parameters.Add(studentID);
-            cmd.Parameters.Add(dob);
+
+            cmd.BindByName = true;
+            cmd.Parameters.Add("id", OracleDbType.Decimal).Value = nextVal;
+            cmd.Parameters.Add("contact", OracleDbType.Varchar2).Value = contactGet;
+            cmd.Parameters.Add("country", OracleDbType.Varchar2).Value = countryGet;
+            cmd.Parameters.Add("email", OracleDbType.Varchar2).Value = email;
+            cmd.Parameters.Add("name", OracleDbType.Varchar2).Value = name;
+            cmd.Parameters.Add("dob", OracleDbType.Date).Value = DateTime.Parse(dobGet);
             cmd.ExecuteNonQuery();
-        }
-        else
+
+
+        if (!exists)
         {
-            Response.Write("Invalid wala Fuck");
-            //string emailAddress = emailBox.Text;
-            // Validation failed, handle it accordingly
-            // For example, display an error message
-            // or prevent further processing
+            Thread.Sleep(1000);
+
+            // Redirect to another page
+            Response.Redirect("student-inspect.aspx");
         }
+        }
+
+
 
     }
 }

@@ -42,11 +42,11 @@ public partial class features_instructor_instructor_inspect : System.Web.UI.Page
 
     private void BindDataToRepeater(int? id)
     {
-        string query = studentOptions.SelectedIndex != 0 ? @"SELECT ci.INSTRUCTOR_NAME AS name  FROM INSTRUCTOR_COURSE_STUDENT ics 
+        string query = studentOptions.SelectedIndex != 0 ? @"SELECT ci.INSTRUCTOR_ID as id, ci.INSTRUCTOR_NAME AS name  FROM INSTRUCTOR_COURSE_STUDENT ics 
 JOIN COURSE_INSTRUCTOR ci ON ci.INSTRUCTOR_ID = ics.INSTRUCTOR_ID 
-WHERE ics.COURSE_ID = :id" : @"SELECT ci.INSTRUCTOR_NAME AS name  FROM INSTRUCTOR_COURSE_STUDENT ics
+WHERE ics.COURSE_ID = :id" : @"SELECT ci.INSTRUCTOR_ID as id, ci.INSTRUCTOR_NAME AS name  FROM INSTRUCTOR_COURSE_STUDENT ics
 JOIN COURSE_INSTRUCTOR ci ON ci.INSTRUCTOR_ID = ics.INSTRUCTOR_ID 
-GROUP BY ci.INSTRUCTOR_NAME  
+GROUP BY ci.INSTRUCTOR_NAME, ci.INSTRUCTOR_ID  
 HAVING COUNT(DISTINCT ics.COURSE_ID) >= 2";
 
         // Execute the query and retrieve data into a DataTable or other data structure

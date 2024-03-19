@@ -156,9 +156,9 @@ WHERE S_NO=:sid AND COURSE_ID=:cid";
             bool wasThere = payload.insId != null;
 
             string query = !wasThere ? @"INSERT INTO ""C##ROHAN"".INSTRUCTOR_COURSE_STUDENT
-(INSTRUCTOR_ID, COURSE_ID, STUDENT_NO)
+(INSTRUCTOR_ID, COURSE_ID, s_no)
 VALUES(:insId, :cid, :sid)" : @"UPDATE ""C##ROHAN"".INSTRUCTOR_COURSE_STUDENT
-SET INSTRUCTOR_ID=:insId where  COURSE_ID=:cid and STUDENT_NO=:sid";
+SET INSTRUCTOR_ID=:insId where  COURSE_ID=:cid and s_no=:sid";
             OracleCommand mappingCmd = new OracleCommand(query, con);
             mappingCmd.BindByName = true;
             mappingCmd.Parameters.Add("sid", OracleDbType.Decimal).Value = selectedStudentId;

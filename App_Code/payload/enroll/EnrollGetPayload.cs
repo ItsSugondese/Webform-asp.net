@@ -61,9 +61,9 @@ public class EnrollGetPayload
         string query = @"SELECT ROW_NUMBER() OVER (ORDER BY se.S_NO) AS sno,
 s.STUDENT_NAME AS std, s.S_NO as sid, c.course_id as cid, s.email as email, c.COURSE_NAME AS course, to_Char(se.ENROLL_DATE, 'YYYY-MM-DD') AS enrollDate ,
  ics.INSTRUCTOR_ID AS insId
-FROM STUDENT_ENROLLMENT se  JOIN STUDENTS s ON s.S_NO  = se.S_NO 
+FROM STUDENT_ENROLLMENT se  JOIN STUDENT s ON s.S_NO  = se.S_NO 
 JOIN COURSE c ON c.COURSE_ID = se.COURSE_ID 
-LEFT JOIN INSTRUCTOR_COURSE_STUDENT ics ON ics.COURSE_ID = se.COURSE_ID AND ics.STUDENT_NO = se.S_NO 
+LEFT JOIN INSTRUCTOR_COURSE_STUDENT ics ON ics.COURSE_ID = se.COURSE_ID AND ics.s_no = se.S_NO 
 WHERE se.COURSE_ID = " + courseId + " and se.S_NO = " + stdId; 
 
 
